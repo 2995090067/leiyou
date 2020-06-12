@@ -1,0 +1,53 @@
+server:
+  port: 10010
+---
+eureka:
+  client:
+    service-url:
+      defaultZone: http://127.0.0.1:10000/eureka,http://127.0.0.1:10001/eureka
+#    registry-fetch-interval-seconds: 20 #网关默认拉去服务列表是30秒一次
+---
+spring:
+  application:
+    name: api-gateway
+---
+zuul:
+  prefix: /api #添加路由前缀
+  routes:
+    items-service: /item/** #这个是我们的XX的服务名称
+    upload-service:
+      path: /upload/**
+      serviceId: upload-service
+      strip-prefix: false
+---
+#调整默认的超时时长全局的
+hystrix:
+  command:
+    default:   #这里可以写方法名或服务名，这样就是指定的超时时长了
+      execution:
+        isolation:
+          thread:
+            timeoutInMiliseconds: 5000 #超时时长为5秒，单位是毫秒
+---
+#fegin的超时时长配置 他是微服務之間的同步交互
+ribbon:
+  ConnectionTimeOut: 1000 #fegin的超时时长,默认1秒
+  ReadTimeOut: 3500 #读取数据时长,默认1000
+  MaxAutoReteries: 0 #当前服务的重试次数
+  MaxAutoReteriesNextServer: 0 #切换服务重试次数
+---
+#fegin的熔断配置,默认是关闭的
+feign:
+  hystrix:
+    endabled: true #开启feign的熔断机制
+---
+#fegin的请求压缩
+#feign:
+#  compression:
+#    request:
+#      enabled: true #开启请求压缩
+#      mime-type: text/html,application/xml,application/json #设置压缩的数据类型
+#      min-request-size: 2048 #设置出发压缩的大小下限 上面压缩类型和大小下限均为默认值
+#    response:
+#      enabled: true #开启响应压缩
+##deploy上传到meavn私服

@@ -1,0 +1,25 @@
+server:
+  port: 8081
+---
+#服务名
+spring:
+  application:
+    name: items-service
+  datasource:
+#    driver-class-name: com.mysql.jdbc.Driver 看到这个就自动判断 是否使用uncicode编码集
+    url: jdbc:mysql://127.0.0.1:3306/zyyun6?useUnicode=true&characterEncoding=utf8&serverTimezone=GMT
+    username: root
+    password: root
+eureka:
+  client:
+    service-url:
+      defaultZone: http://127.0.0.1:10000/eureka,http://127.0.0.1:10001/eureka
+  instance:
+    prefer-ip-address: true
+    ip-address: 127.0.0.1
+#    让他，默认拿到的是ip
+---
+mybatis:
+  configuration:
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+    #他帮你打出sql日志

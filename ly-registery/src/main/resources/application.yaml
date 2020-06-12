@@ -1,0 +1,24 @@
+server:
+  port: 10000
+---
+spring:
+  application:
+    name: ly-registry
+---
+#让eureka互相注册
+eureka:
+  client:
+    service-url:
+      defaultZone: http://127.0.0.1:10001/eureka
+  server:
+    eviction-interval-timer-in-ms: 30000
+    enable-self-preservation: false  #关闭自我保护（缺省为打开）
+#    对于开发环境的 Eureka Server，个人更建议关闭它的自我保护模式，
+#因为你可能需要不断的开启与关闭实例，如果并未关闭自我保护模式，那么很容易就会触发自我保护模式，此时对调试会相对比较麻烦。
+#  10和11失效剔除机制，默认60秒，下面的是毫秒单位，建议选择默认也就不动，因为它相当耗资源
+#      如果是三台eureka的话上面就必须注册其他两台的地址
+---
+#给服务配置名字
+spring:
+  application:
+    name: eureka-10000
